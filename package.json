@@ -1,0 +1,23 @@
+{
+  "name": "pramati-chain",
+  "version": "1.0.0",
+  "description": "\"Prmati blockchain from scratch\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-test": "nodemon dev-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.pramati.com/vishwasb/pramati-chain.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^23.5.0",
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
+  }
+}
