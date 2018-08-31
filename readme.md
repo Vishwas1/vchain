@@ -53,13 +53,9 @@
 11. Work on Sockets receiving/sending messages amoung each other
 
 12. Synchronizing blocks acoss peers.
-
+    - Whenever a new peer gets added -> in syncChain() -> replace the chain with new chain(of course if it is longer and other validation is passed)
+    - when ever /mine api gets called -> call for syncChain() method.
     
-
-
-
-
-
 ## Tech Used
 - Jest : for testing 
 

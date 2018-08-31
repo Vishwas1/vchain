@@ -26,6 +26,7 @@ app.post('/mine', (req,res) => {
     const block = bc.addBlock(req.body.data);
     console.log(`A new block added : ${block.toString()}`);
     res.redirect('/blocks');
+    p2pServer.syncChains();
 })
 
 app.listen(HTTP_PORT,()=>{
