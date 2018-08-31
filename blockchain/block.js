@@ -21,7 +21,7 @@ class Block {
 
     static genesis (){
         //return new this('Genesis time','----','f1r57',[])
-        const timestamp = Date.now();
+        const timestamp = 'Some timestamp';
         const lasthash = '';
         const data = [];
         return new this(timestamp,lasthash,Block.hash(timestamp,lasthash, data),data)
@@ -37,6 +37,11 @@ class Block {
 
     static hash(timestamp, lastHash, data){
         return SHA256(`${timestamp}${lastHash}${data}`).toString();
+    }
+
+    static blockHash(block){
+        const { timestamp ,  lasthash, data} = block;
+        return Block.hash(timestamp, lasthash, data);
     }
 }
 
