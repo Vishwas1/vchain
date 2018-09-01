@@ -13,7 +13,9 @@ class Blockchain{
 
     isValidChain(chain) {
         // incoming geesis is not valid for new cahin
-        if(JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())) return false; 
+        if(JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())){    
+            return false;
+        } 
         // run validation for every block after the genesis block in incoming chain
         for(let i=1; i < chain.length; i++){
             const block = chain[i];
@@ -35,7 +37,9 @@ class Blockchain{
         // longest chain rule..
         // 1st check if the newChain length is > existing chain, if not return
         if(newChain.length <= this.chain.length){
-            console.log('New chain is shorter that the exisiting.')
+            console.log('newChain.length  : ' , newChain.length )
+            console.log('existing.length  : ' , this.chain.length )
+            console.log('New chain is shorter or equal to the exisiting.')
             return;
         } else if (!this.isValidChain(newChain)){
             console.log('New chain is not valid.')

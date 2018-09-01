@@ -55,7 +55,18 @@
 12. Synchronizing blocks acoss peers.
     - Whenever a new peer gets added -> in syncChain() -> replace the chain with new chain(of course if it is longer and other validation is passed)
     - when ever /mine api gets called -> call for syncChain() method.
+
+13. Till now fair enough. But we are allowing any one to add any block. Which means that any one can any invalid data (as of now we are just giving some random text in data parameter but ideally that will be transactions)
+    - Which mean we have to make use of DIFFICULTY and NOUNCE
+    - We can set DIFFICULTY as "generated hash should have 4 leading zeros"
+    - We will set NOUNCE = 0 initially and keep procuding hash and will keep checking if it met DIFICULTY or not
+    - If not we will keep on increasing NOUNCE by 1 and then regenerate hash
+    - We also have to make sure that this DIFFICULTY should adjust time to time 
+    - This is nothing but POW : proof of work
     
+
+
+
 ## Tech Used
 - Jest : for testing 
 
@@ -68,3 +79,7 @@
 1. npm run dev
 2. HTTP_PORT=3002 P2P_PORT=5002 PEERS=ws://localhost:5001 npm run dev
 3. HTTP_PORT=3003 P2P_PORT=5003 PEERS=ws://localhost:5001,ws://localhost:5002 npm run dev
+
+## References 
+
+https://docs.google.com/document/d/1h8Ow3OHdHyHjgK0MtMryCrgR5stb51bPmaIhIAi54Q0/
