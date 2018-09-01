@@ -1,13 +1,14 @@
 const SHA256  = require('crypto-js/sha256');
-const DIFFICULTY = require('../config')
+const {DIFFICULTY, MINE_RATE} = require('../config')
 
 class Block {
-    constructor(timestamp, lasthash, hash, data, nounce){
+    constructor(timestamp, lasthash, hash, data, nounce, difficulty){
         this.timestamp = timestamp;
         this.lasthash = lasthash;
         this.hash = hash;
         this.data = data;
         this.nounce = nounce; 
+        this.difficulty = difficulty || DIFFICULTY;
     }
 
     toString() {    
@@ -18,6 +19,7 @@ class Block {
             Hash      : ${this.hash}
             Data      : ${this.data}
             Nounce    : ${this.nounce}
+            Difficulty: ${this.difficulty}
         `;
     }
 
@@ -26,33 +28,43 @@ class Block {
         const timestamp = 'Some timestamp';
         const lasthash = '';
         const data = [];
-        return new this(timestamp,lasthash,Block.hash(timestamp,lasthash, data, 0),data,0)
+        const diff = DIFFICULTY;
+        return new this(timestamp,lasthash,Block.hash(timestamp,lasthash, data, 0, diff),data,0, diff)
     }
 
     static mineBlock(lastBlock, data){
-        let difficulty = DIFFICULTY.DIFFICULTY;
-        let timestamp =  Date.now();
-        const lasthash = lastBlock.hash;
+        console.log(DIFFICULTY)
+        let timestamp =  Date.now();        
+        let {difficulty} = lastBlock;
         let nounce = 0;
         let hash = ''; //Block.hash(timestamp, lasthash, data, nounce);
+        const lasthash = lastBlock.hash;
         do{
             timestamp = Date.now();
+            difficulty = Block.adjustDifficulty(lastBlock,timestamp);
             nounce++;
-            hash =  Block.hash(timestamp, lasthash, data, nounce);
+            hash =  Block.hash(timestamp, lasthash, data, nounce, difficulty);
             
         }
         while(hash.substring(0, difficulty) !== '0'.repeat(difficulty))
-        return new this(timestamp, lasthash, hash, data, nounce); 
+        return new this(timestamp, lasthash, hash, data, nounce, difficulty); 
 
     }
 
-    static hash(timestamp, lastHash, data, nounce){
-        return SHA256(`${timestamp}${lastHash}${data}${nounce}`).toString();
+    static hash(timestamp, lastHash, data, nounce, difficulty){
+        return SHA256(`${timestamp}${lastHash}${data}${nounce}${difficulty}`).toString();
     }
 
     static blockHash(block){
-        const { timestamp ,  lasthash, data, nounce} = block;
-        return Block.hash(timestamp, lasthash, data, nounce);
+        const { timestamp ,  lasthash, data, nounce, difficulty} = block;
+        return Block.hash(timestamp, lasthash, data, nounce, difficulty);
+    }
+
+    static adjustDifficulty(lastBlock, currentTime){
+        let {difficulty} = lastBlock;
+        // currentTime - lastBlock.timestamp > MINE
+        difficulty = lastBlock.timestamp + MINE_RATE  > currentTime ? difficulty + 1 : difficulty - 1;
+        return difficulty;
     }
 }
 

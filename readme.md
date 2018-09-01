@@ -56,15 +56,29 @@
     - Whenever a new peer gets added -> in syncChain() -> replace the chain with new chain(of course if it is longer and other validation is passed)
     - when ever /mine api gets called -> call for syncChain() method.
 
-13. Till now fair enough. But we are allowing any one to add any block. Which means that any one can any invalid data (as of now we are just giving some random text in data parameter but ideally that will be transactions)
+13. Till now fair enough. But we are allowing any one to add any block. Which means that any one can add any invalid data (as of now we are just giving some random text in data parameter but ideally that will be transactions)
     - Which mean we have to make use of DIFFICULTY and NOUNCE
+    - Miners must spent bit of computation power to add a block
     - We can set DIFFICULTY as "generated hash should have 4 leading zeros"
     - We will set NOUNCE = 0 initially and keep procuding hash and will keep checking if it met DIFICULTY or not
     - If not we will keep on increasing NOUNCE by 1 and then regenerate hash
     - We also have to make sure that this DIFFICULTY should adjust time to time 
     - This is nothing but POW : proof of work
     
-
+14. Now we want our blockchain to : *Dynamically change the DIFFICULTY*
+    - based on how frequently we generate a block
+    - Currently its static value set in config file as 4. it would take roughly same amount of time to mine each block
+    - As more peers added to the network, blocks will be discovered at faster rate... which means that there will higher chance for 1 miner to add the block (which leads to centralization again).
+    - So the difficulty should be dynamically adjusting as new miners are added to the blockchain
+    - Which means the blocks are mined in certain rate (say every 5 sec or 1 min or even 10 min like Bitcoin does)
+    
+15. How we achieve the *Dynamic Difficulty*
+    - We add `difficulty` attribute to each block
+    - Also we will add time value , `mine rate` : which represents rate at which each block will get mined
+    - Will check timestamp of newly mined block and compare the timestamp of previously mined block
+    - If difference between both timestamp is lower than `mine rate` -> `difficulty` was easy -> raise it by 1
+    - If difference between both timestamp is greated than `mine rate` -> `difficulty` was hard -> lower it by 1
+    - In this weas we keed adjusting the `difficulty` as blocks are added.
 
 
 ## Tech Used

@@ -1,5 +1,4 @@
 const Block = require("./block.js")
-const DIFFICULTY =  require('../config.js')
 
 describe('Block', ()=>{
     let data, lastBlock, block, difficulty;
@@ -22,6 +21,8 @@ describe('Block', ()=>{
 
     it('should generated hash that matches with difficulty', ()=>{
 
-        expect(block.hash.substring(0, difficulty)).toEqual('0'.repeat(difficulty))
+        expect(block.hash.substring(0, block.difficulty)).toEqual('0'.repeat(block.difficulty))
     })
+
+    
 })
