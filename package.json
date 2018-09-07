@@ -9,8 +9,8 @@
     "test": "jest --watchAll",
     "dev-test": "nodemon dev-test"
   },
-  "jest" : {
-    "testEnvironment" : "node"
+  "jest": {
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",

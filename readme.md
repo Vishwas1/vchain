@@ -96,7 +96,8 @@
 
 18. Creating tranasaction object : 3 components
     - input field : who is sending tx and how much he owns
-    - output field : what data(how much currency) is in tx and to whom before the tx and how much will have after the tx.
+    - output field : 1) what data(how much currency) is in tx and to whom before the tx.
+                     2) how much he will have after the tx is compelete.
     - unique id  : identify the tx : `npm i uuid` uuid for generating ids.
 
 

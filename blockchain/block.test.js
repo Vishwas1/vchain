@@ -6,7 +6,7 @@ describe('Block', ()=>{
         // will gets executed before of all its.
         data = "New data";
         lastBlock = Block.genesis();
-        difficulty = DIFFICULTY.DIFFICULTY;
+        // difficulty = DIFFICULTY.DIFFICULTY;
         block = Block.mineBlock(lastBlock, data);
     })
 

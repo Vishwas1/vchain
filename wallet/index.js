@@ -5,13 +5,17 @@ class Wallet {
     constructor(){
         this.balance = INITIAL_BALANCE;
         this.keyPair = ChainUtil.genKeyPair();
-        this.publiKey = this.keyPair.getPublic().encode('hex');
+        this.publicKey = this.keyPair.getPublic().encode('hex');
     }
 
     toString(){
         return `Wallet - 
-            publicKey : ${this.publiKey.toString()}
+            publicKey : ${this.publicKey.toString()}
             balance   : ${this.balance}`
+    }
+
+    sign(dataHash){
+        return this.keyPair.sign(dataHash);
     }
 }
 
