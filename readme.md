@@ -80,6 +80,26 @@
     - If difference between both timestamp is greated than `mine rate` -> `difficulty` was hard -> lower it by 1
     - In this weas we keed adjusting the `difficulty` as blocks are added.
 
+16. Now let's focus on creating Crypto currencies and Wallets for our blockchain.
+    - Pre-requisite : *Digital signature concept*
+    - Components to implement :
+        - we need wallet for individual users
+        - we need keys(pk/sk) for digital signature and verifications for users
+        - we also have to implement transaction object to represent currency exhanges between the individuals.
+
+17. Lets create a Wallet
+    - Create a wallet object which will have private and public keys for the individual wallets.
+    - Will will give Initial balance to every one to get going. This initial balance can be set in the config file.
+    - We gonna make use of npm module - `npm i elliptic` to generate priv/pub key pair.
+    - Bit coin uses [**secp256k1**](https://en.bitcoin.it/wiki/Secp256k1) : refers to the parameters of the elliptic curve used in Bitcoin's public-key cryptography, and is defined in *Standards for Efficient Cryptography (SEC)*. 
+    - genKeyPair() will be used to generate key pair.
+
+18. Creating tranasaction object : 3 components
+    - input field : who is sending tx and how much he owns
+    - output field : what data(how much currency) is in tx and to whom before the tx and how much will have after the tx.
+    - unique id  : identify the tx : `npm i uuid` uuid for generating ids.
+
+
 
 ## Tech Used
 - Jest : for testing 
@@ -96,4 +116,10 @@
 
 ## References 
 
-https://docs.google.com/document/d/1h8Ow3OHdHyHjgK0MtMryCrgR5stb51bPmaIhIAi54Q0/
+- https://docs.google.com/document/d/1h8Ow3OHdHyHjgK0MtMryCrgR5stb51bPmaIhIAi54Q0/
+- https://en.bitcoin.it/wiki/Secp256k1 
+- http://www.secg.org/sec2-v2.pdf
+- https://bitcoin.org/en/resources 
+- https://www.khanacademy.org/economics-finance-domain/core-finance/money-and-banking/bitcoin/v/bitcoin-transaction-records 
+- 
+
