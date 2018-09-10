@@ -1,5 +1,5 @@
 const Transaction = require('./transaction')
-const Wallet = require('./index.js')
+const Wallet = require('.')
 
 describe('Transaction', ()=>{
   let senderWallet, transaction, receipent, amount;

@@ -100,6 +100,14 @@
                      2) how much he will have after the tx is compelete.
     - unique id  : identify the tx : `npm i uuid` uuid for generating ids.
 
+19. Transaction Pool
+    - Multiple individuals will be creating tx simulataneously, we need to cpature them first in some buffer - traction pool, from which miners will pick up a tranctions and validate it
+    - The pool will be nothing but an `object` which will contains all the tranctions submitted by all peoples.
+    - As they do so, the status of tx will be *Unconfirmed*
+    - Miners will create block using these txs (group of tx), and that confirms tranctions.
+
+20. 
+
 
 
 ## Tech Used

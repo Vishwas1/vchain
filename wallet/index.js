@@ -1,5 +1,6 @@
 const { INITIAL_BALANCE } = require('../config.js')
 const ChainUtil = require('../util/chain-util.js')
+const Transaction =  require('./transaction')
 
 class Wallet {
     constructor(){
@@ -16,6 +17,24 @@ class Wallet {
 
     sign(dataHash){
         return this.keyPair.sign(dataHash);
+    }
+
+    createTransaction(recepient, amount, transactionPool){
+        if(amount > this.balance){
+            console.log(`Insufficient balance. ${amount} is less than ${this.balance}`)
+            return
+        }
+
+        let tranasactionInPool =  transactionPool.existingTrasaction(this.publicKey);
+        if(tranasactionInPool){
+            //update the transction - exisint tx
+        }else{
+            //add tx into the pool - new tx
+            tranasactionInPool =  Transaction.newTransaction(this,recepient,amount)
+            transactionPool.updateOrAddTranction(tranasactionInPool);
+
+        }
+        return tranasactionInPool;
     }
 }
 
