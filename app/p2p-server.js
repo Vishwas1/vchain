@@ -4,10 +4,15 @@ const P2P_PORT = process.env.P2P_PORT || 5001;
 
 // peers (basically a comma separated string) will contain list of web sockets addresses to which this web socket will connects to as peer
 const peers =  process.env.PEERS ? process.env.PEERS.split(',') : [];
+const MESSAGE_TYPES = { 
+    chain : 'CHAIN',
+    txkey : 'TRANSACTION'
+ }
 
 class P2pServer{
-    constructor(blockchain){
+    constructor(blockchain, txpool){
         this.blockchain = blockchain;
+        this.transactionPool = txpool;
         this.sockets = [];
         
     }
@@ -48,13 +53,24 @@ class P2pServer{
     messageHandler(socket) {
         socket.on('message', (message)=>{
             const data = JSON.parse(message);
-            this.blockchain.replaceChain(data);
+            switch(data.type){
+                case MESSAGE_TYPES.chain : 
+                    this.blockchain.replaceChain(data.chain);        
+                    break;
+                case MESSAGE_TYPES.txkey : 
+                    this.transactionPool.updateOrAddTranction(data.transaction);
+                    break;
+            }
+            
         })
     }
 
 
     sendChain(socket){
-        socket.send(JSON.stringify(this.blockchain.chain));
+        socket.send(JSON.stringify({
+            type : MESSAGE_TYPES.chain,
+            chain : this.blockchain.chain}
+        ));
     }
 
     /**
@@ -65,6 +81,22 @@ class P2pServer{
         this.sockets.forEach((socket) =>{
             this.sendChain(socket);
         })
+    }
+
+    /**
+     * syncing txpool across the chain
+     * send the updated blockchain to all of peers
+     */
+    broadCastTransaction(tranasaction){
+        this.sockets.forEach((socket) =>{
+            this.sendTransaction(socket, tranasaction);
+        })
+    }
+
+    sendTransaction(socket, transaction){
+        socket.send(JSON.stringify({
+            type : MESSAGE_TYPES.txkey ,
+            transaction : transaction}));
     }
 
 

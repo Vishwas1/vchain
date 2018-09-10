@@ -18,13 +18,16 @@ describe('TransactionPool', ()=>{
         amount = 50;
         receipent = 'Some random recepient address'
         tx = senderWallet.createTransaction(receipent, amount, transactionPool)
+        tx = senderWallet.createTransaction(receipent, amount, transactionPool)
     })
+
+    it('should double the amount', () => {
+        expect(tx.outputs.find(op => op.address == senderWallet.publicKey).amount)
+        .toEqual(senderWallet.balance - (amount * 2));
+    })
+
+    //it('')
     
-    it('Adds a tranctions into the pool', ()=>{
-        
-        expect(transactionPool.transactions.find(tx => tx.id == transaction.id))
-        .toEqual(transaction)
-      })
   })
   
   

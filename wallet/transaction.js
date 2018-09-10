@@ -7,6 +7,21 @@ class Transation {
         this.outputs = []; // 2 o/ps. 1. How much sender wants to send 2. How much he will have after tx is complete
     }
 
+    updateTransaction(senderWallet, recipient, amount){
+        const senderOutput = this.outputs.find(op => op.address === senderWallet.publicKey);
+        if(amount > senderWallet.balance){
+            console.log(`Amount ${amount} exceeds balance`)
+            return;
+        }
+
+        senderOutput.amount -= amount;
+
+        this.outputs.push ({amount, address  : recipient});
+        Transation.signTransaction(this, senderWallet)
+
+        return this;
+    }
+
     static newTransaction(senderWallet, recipient, amount){
         const trasaction = new this();
         if(amount > senderWallet.balance){

@@ -106,7 +106,16 @@
     - As they do so, the status of tx will be *Unconfirmed*
     - Miners will create block using these txs (group of tx), and that confirms tranctions.
 
-20. 
+20. Shared transaction pool : Tx pool synchromization
+    - Now we have to make sure that, when ever a user submits tthe transaction, it should go into a          commonly  shared transcation pool. 
+    - Which means tx. pools sync
+    - We will make use of web socket for synchronisation tx pool just like we did for blockchain
+    - In short adding `tx-pool` to p2p server. - `broadCastTransaction()`
+    - First we will create instances of `Wallet` and `TransactionPool`
+    - Lets add APIs for getting and addign trasactions.
+        - /transactions
+        - /transact
+
 
 
 

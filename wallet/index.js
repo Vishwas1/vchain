@@ -28,6 +28,7 @@ class Wallet {
         let tranasactionInPool =  transactionPool.existingTrasaction(this.publicKey);
         if(tranasactionInPool){
             //update the transction - exisint tx
+            tranasactionInPool.updateTransaction(this, recepient, amount);
         }else{
             //add tx into the pool - new tx
             tranasactionInPool =  Transaction.newTransaction(this,recepient,amount)
@@ -36,6 +37,6 @@ class Wallet {
         }
         return tranasactionInPool;
     }
-}
+}   
 
 module.exports = Wallet;
