@@ -37,6 +37,12 @@ class Wallet {
         }
         return tranasactionInPool;
     }
+
+    static blockchainWallet(){
+        const bcWallet =  new this();
+        bcWallet.publicKey = "blockchain-wallet";
+        return bcWallet;
+    }
 }   
 
 module.exports = Wallet;

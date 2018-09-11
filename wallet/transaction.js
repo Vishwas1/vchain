@@ -1,6 +1,6 @@
 const ChainUtil = require('../util/chain-util.js')
-
-class Transation {
+const { MINING_REWARD } =  require('../config')
+class Transaction {
     constructor(){
         this.id = ChainUtil.id();
         this.input = null;
@@ -17,27 +17,43 @@ class Transation {
         senderOutput.amount -= amount;
 
         this.outputs.push ({amount, address  : recipient});
-        Transation.signTransaction(this, senderWallet)
+        Transaction.signTransaction(this, senderWallet)
 
         return this;
     }
 
-    static newTransaction(senderWallet, recipient, amount){
+    static formTransaction(senderWallet, outputs){
         const trasaction = new this();
+        // '....' represents ES6 spread opeartor
+        trasaction.outputs.push(...outputs);
+
+        Transaction.signTransaction(trasaction, senderWallet);
+        return trasaction
+    }
+
+    static newTransaction(senderWallet, recipient, amount){
+        
         if(amount > senderWallet.balance){
             console.log(`Amount ${amount} exceeds balance`)
             return;
         }
 
-        // '....' represents ES6 spread opeartor
-        trasaction.outputs.push(...[
+        const outputs = [
             {amount  : senderWallet.balance - amount ,  address : senderWallet.publicKey},
             {amount  : amount ,  address : recipient}
+        ];
+
+        return Transaction.formTransaction(senderWallet, outputs);
+    }
+
+
+    static rewardTransaction(minerWallet, blockchainWallet){
+        return Transaction.formTransaction(blockchainWallet, [
+            {
+                amount : MINING_REWARD,
+                address : minerWallet.publicKey
+            }
         ])
-
-        Transation.signTransaction(trasaction, senderWallet);
-
-        return trasaction;
     }
 
     static signTransaction(trasaction, senderWallet){
@@ -58,4 +74,4 @@ class Transation {
     }
 }
 
-module.exports = Transation;
+module.exports = Transaction;

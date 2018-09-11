@@ -116,7 +116,25 @@
         - /transactions
         - /transact
 
+21. Binding transactions from pool into blockchain : Including transctions as data into block
+    - So far `data` in `block` object is some text.
+    - That property has to be filled with actual transactions, picked up from the tx pool by miners and inculde into data property to form a block. this process is called mining.
+    - So basically, miner, will call [/mine](http://localhost:3001/mine) endpoint to do this.
+    - Which means that we need to tie blockchain with the transaction pool. - that's exactly what our `Miner` class will do.
+    - Also notice that for doing this work, miner should get some rewards too.
 
+22. Steps for mining 
+    - Grab valid tx from pool.
+        - Its total output amount matches the total input amount 
+        - Verify the signature of every tx to make sure data is not currupted after it is signed by sender.
+    - Give rewards to miner : Include reward tx for the miner.
+        - Transaction object similar to normal transactions except there will be just 1 output : the one which miner receives and since there is no exchange necessary, no exchange out put is required.
+        - But the input object will be unique that identifies that blockchain itself conducted the transctions - blockchain itself signs the transaction.
+        - Which also means that, the blockchain should have a wallet too. 
+    - Create block consisiting of valid transactions.  
+    - Synchronize the chains in P2P server.
+    - Clear the tx pool which is local to miner.
+    - Broadcast to every miner to clear their tx pool so that they wont mine on the same block..
 
 
 ## Tech Used
@@ -138,6 +156,8 @@
 - https://en.bitcoin.it/wiki/Secp256k1 
 - http://www.secg.org/sec2-v2.pdf
 - https://bitcoin.org/en/resources 
-- https://www.khanacademy.org/economics-finance-domain/core-finance/money-and-banking/bitcoin/v/bitcoin-transaction-records 
-- 
+-https://www.khanacademy.org/economics-finance-domain/core-finance/money-and-banking/bitcoin/v/bitcoin-transaction-records 
+- https://en.bitcoin.it/wiki/Bitcoin 
+- https://github.com/bitcoin/bips 
+- http://bcoin.io/ 
 

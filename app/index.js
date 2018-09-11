@@ -4,6 +4,7 @@ const Blockchain = require("../blockchain");
 const P2pServer = require("./p2p-server");
 const Wallet = require('../wallet')
 const TransactionPool = require('../wallet/transaction-pool');
+const Miner =  require('./miner');
 
 
 const HTTP_PORT = process.env.HTTP_PORT || 3001;
@@ -21,6 +22,8 @@ const wallet = new Wallet();
 const tp =  new TransactionPool();
 // creating instance of p2p server instance
 const p2pServer =   new P2pServer(bc, tp);
+// creating miner instance 
+const miner = new Miner(bc, tp, wallet, p2pServer);
 
 // get request for getting all the blocks
 app.get('/blocks', (req, res) => {
@@ -40,7 +43,6 @@ app.get('/transactions', (req,res) => {
     res.json(tp.transactions)
 })
 
-
 // post request for creating tranasctions
 app.post('/transact', (req,res) =>{
     //transaction means :  sender, receipient, amount right?
@@ -51,9 +53,22 @@ app.post('/transact', (req,res) =>{
     p2pServer.broadCastTransaction(transaction);
 })
 
+// get public key api
+app.get('/public-key', (req,res)=> {
+    res.json({publicKey : wallet.publicKey});
+})
+
+// get api to mine transactions
+app.get('/mine-transactions',(req, res)=> {
+    const block = miner.mine();
+    //console.log(`A new block has been added: ${block.toString()}`)
+    res.redirect('/blocks');
+})
+
 app.listen(HTTP_PORT,()=>{
     console.log(`Listening on : ${HTTP_PORT}`);
 });
+
 
 p2pServer.listen();
 
