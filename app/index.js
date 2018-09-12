@@ -48,7 +48,7 @@ app.post('/transact', (req,res) =>{
     //transaction means :  sender, receipient, amount right?
     const {recepient, amount} = req.body;
     console.log(`Amount  : ${amount} && Recepient : ${recepient}`)
-    const transaction =  wallet.createTransaction(recepient, amount, tp);
+    const transaction =  wallet.createTransaction(recepient, amount, bc ,tp);
     res.redirect('/transactions');
     p2pServer.broadCastTransaction(transaction);
 })
@@ -63,6 +63,13 @@ app.get('/mine-transactions',(req, res)=> {
     const block = miner.mine();
     //console.log(`A new block has been added: ${block.toString()}`)
     res.redirect('/blocks');
+})
+
+// check the balance
+app.get('/balance', (req,res)=>{
+    res.json({
+        balance : wallet.calculateBalance(bc)
+    })
 })
 
 app.listen(HTTP_PORT,()=>{

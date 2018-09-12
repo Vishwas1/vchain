@@ -1,13 +1,15 @@
 const TransactionPool = require('./transaction-pool')
 const Transaction = require('./transaction')
 const Wallet = require('.')
+const Blockchain = require("../blockchain");
 
 describe('TransactionPool', ()=>{
-  let senderWallet, transactionPool 
+  let senderWallet, transactionPool , bc;
   
   beforeEach(()=>{
     senderWallet = new Wallet();  
     transactionPool = new TransactionPool();
+    bc = new Blockchain();
   })
 
 
@@ -17,8 +19,8 @@ describe('TransactionPool', ()=>{
     beforeEach(()=>{
         amount = 50;
         receipent = 'Some random recepient address'
-        tx = senderWallet.createTransaction(receipent, amount, transactionPool)
-        tx = senderWallet.createTransaction(receipent, amount, transactionPool)
+        tx = senderWallet.createTransaction(receipent, amount, bc, transactionPool)
+        tx = senderWallet.createTransaction(receipent, amount, bc, transactionPool)
     })
 
     it('should double the amount', () => {

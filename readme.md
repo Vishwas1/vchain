@@ -136,6 +136,10 @@
     - Clear the tx pool which is local to miner.
     - Broadcast to every miner to clear their tx pool so that they wont mine on the same block..
 
+23. Updating balance of wallets
+    - Balance will be : *All output amounts that belongs to the user*
+    - Update balance at each tranasaction happens to-from the user.
+    - Balance calculation will be based on output values in the most recent tranasctions happened in blockchain.
 
 ## Tech Used
 - Jest : for testing 

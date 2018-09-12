@@ -19,7 +19,10 @@ class Wallet {
         return this.keyPair.sign(dataHash);
     }
 
-    createTransaction(recepient, amount, transactionPool){
+    createTransaction(recepient, amount, blockchain ,transactionPool){
+        // calculate and set the balance
+        this.balance = this.calculateBalance(blockchain);
+
         if(amount > this.balance){
             console.log(`Insufficient balance. ${amount} is less than ${this.balance}`)
             return
@@ -42,6 +45,51 @@ class Wallet {
         const bcWallet =  new this();
         bcWallet.publicKey = "blockchain-wallet";
         return bcWallet;
+    }
+
+    calculateBalance(blockchain){
+        let balance = this.balance;
+        let transactions = [];
+
+        // Get all tranasctions
+        blockchain.chain.forEach(block => {
+            block.data.forEach(tx => {
+                transactions.push(tx);
+            })
+        });
+
+        // get inputs wrt this user
+        const walletInputTs = transactions
+            .filter(tx => tx.input.address === this.publicKey);
+
+        
+        let startTime = 0;
+        if(walletInputTs && walletInputTs.length > 0){
+            // get the most recent input tranasaction
+            const recentInputT = walletInputTs
+            .reduce((prev, current) => {
+                prev.input.timestamp > current.input.timestamp ? prev : current;
+            })
+
+            // get the output of most recent tx
+            balance = recentInputT.outputs.find(op => op.address === this.publicKey).amount;
+            
+            // record the timestamp that tx
+            startTime = recentInputT.input.timestamp;
+        }
+
+        // loop through all the transactions
+        transactions.forEach(tx => {
+            if(tx.input.timestamp > startTime){
+                // get outputs amounts and add them up
+                tx.outputs.find(op => {
+                    if(op.address === this.publicKey){
+                        balance += op.amount;
+                    }
+                })
+            }
+        })
+        return balance;
     }
 }   
 
